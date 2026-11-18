@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MY BLACK APP</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, sans-serif;
+    transition: 0.3s;
+}
+
+body.theme-black {
+    --bg: #050505;
+    --text: #ffffff;
+    --panel: #111111;
+    --button: #151515;
+    --border: #333333;
+    --muted: #888888;
+    --accent: #ffffff;
+}
+
+body.theme-white {
+    --bg: #f2f2f2;
+    --text: #171717;
+    --panel: #ffffff;
+    --button: #e5e5e5;
+    --border: #cccccc;
+    --muted: #666666;
+    --accent: #222222;
+}
+
+body.theme-red {
+    --bg: #210606;
+    --text: #ffffff;
+    --panel: #390b0b;
+    --button: #501010;
+    --border: #8b2929;
+    --muted: #e0aaaa;
+    --accent: #ff5555;
+}
+
+body.theme-purple {
+    --bg: #160824;
+    --text: #ffffff;
+    --panel: #261139;
+    --button: #35184b;
+    --border: #603c7b;
+    --muted: #c4a8d9;
+    --accent: #c78aff;
+}
+
+.app {
+    max-width: 430px;
+    min-height: 100vh;
+    margin: auto;
+    padding: 30px 22px;
+}
+
+header {
+    text-align: center;
+    padding: 35px 0;
+    position: relative;
+}
+
+.clock {
+    position: absolute;
+    top: -15px;
+    right: 0;
+    text-align: right;
+}
+
+#clock {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#date {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+h1 {
+    letter-spacing: 4px;
+    font-size: 29px;
+}
+
+.subtitle { color: var(--muted); }
+
+.screen { display: none; }
+.screen.active { display: block; }
+
+button {
+    width: 100%;
+    padding: 19px;
+    margin: 9px 0;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--button);
+    color: var(--text);
+    font-size: 16px;
+    transition: 0.2s;
+}
+
+button:active {
+    background: var(--accent);
+    transform: scale(0.97);
+}
+
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 22px;
+    margin: 15px 0;
+}
+
+h2 { font-size: 23px; }
+
+.muted { color: var(--muted); }
+
+footer {
+    text-align: center;
+    color: var(--muted);
+    margin-top: 45px;
+    font-size: 12px;
+}
+</style>
+</head>
+
+<body class="theme-black">
+
+<div class="app">
+
+<header>
+    <div class="clock">
+        <div id="clock"></div>
+        <div id="date"></div>
+    </div>
+    <h1>MY BLACK APP</h1>
+    <p class="subtitle">ТВОЁ ПРОСТРАНСТВО</p>
+</header>
+
+<section id="home" class="screen active">
+    <div class="panel">
+        <h2>Главное меню</h2>
+        <p class="muted">Добро пожаловать!</p>
+    </div>
+    <button onclick="show('profile')">👤 МОЙ ПРОФИЛЬ</button>
+    <button onclick="show('settings')">⚙️ НАСТРОЙКИ</button>
+    <button onclick="show('about')">ℹ️ О ПРИЛОЖЕНИИ</button>
+</section>
+
+<section id="profile" class="screen">
+    <div class="panel">
+        <h2>Мой профиль</h2>
+        <p>Пользователь MY BLACK APP</p>
+        <p class="muted">Версия 1.0</p>
+    </div>
+    <button onclick="show('home')">← НАЗАД</button>
+</section>
+
+<section id="settings" class="screen">
+    <div class="panel">
+        <h2>Настройки</h2>
+        <p>Выбери тему оформления:</p>
+
+        <button onclick="setTheme('black')">🖤 ЧЁРНАЯ ТЕМА</button>
+        <button onclick="setTheme('white')">🤍 БЕЛАЯ ТЕМА</button>
+        <button onclick="setTheme('red')">❤️ КРАСНАЯ ТЕМА</button>
+        <button onclick="setTheme('purple')">💜 ФИОЛЕТОВАЯ ТЕМА</button>
+
+        <p class="muted">Язык: Русский</p>
+        <p class="muted">Версия: 1.0</p>
+    </div>
+    <button onclick="show('home')">← НАЗАД</button>
+</section>
+
+<section id="about" class="screen">
+    <div class="panel">
+        <h2>О приложении</h2>
+        <p>MY BLACK APP</p>
+        <p>Наш собственный проект!</p>
+    </div>
+    <button onclick="show('home')">← НАЗАД</button>
+</section>
+
+<footer>MY BLACK APP © 2026</footer>
+
+</div>
+
+<script>
+function show(id) {
+    document.querySelectorAll('.screen').forEach(
+        screen => screen.classList.remove('active')
+    );
+    document.getElementById(id).classList.add('active');
+}
+
+function setTheme(theme) {
+    document.body.className = 'theme-' + theme;
+    localStorage.setItem('myAppTheme', theme);
+}
+
+const savedTheme = localStorage.getItem('myAppTheme') || 'black';
+setTheme(savedTheme);
+
+function updateClock() {
+    const now = new Date();
+
+    document.getElementById('clock').textContent =
+        now.toLocaleTimeString('ru-RU');
+
+    document.getElementById('date').textContent =
+        now.toLocaleDateString('ru-RU');
+}
+
+updateClock();
+setInterval(updateClock, 1000);
+</script>
+
+</body>
+</html>
